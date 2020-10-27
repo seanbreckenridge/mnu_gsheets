@@ -41,6 +41,7 @@ class MnuData(NamedTuple):
     date_start: Optional[date]
     date_end: Optional[date]
 
+    @property
     def link(self) -> str:
         return "https://www.nhk.or.jp/minna/songs/{}".format(self.mnu_id)
 
@@ -54,7 +55,7 @@ def _parse_date(ds: str) -> Optional[date]:
         return None
 
 
-def parse_request(d: Dict[str, Any]) -> MnuData:
+def parse_json_entry(d: Dict[str, Any]) -> MnuData:
     return MnuData(
         mnu_id=d["keyname"],
         title=d["title"],
@@ -78,4 +79,4 @@ def request_mnu_data() -> Iterator[MnuData]:
     Request info from the NHK website
     """
     resp: requests.Response = cachesession.get(INDEX)
-    yield from map(parse_request, resp.json()["items"])
+    yield from map(parse_json_entry, resp.json()["items"])

@@ -4,6 +4,8 @@ from setuptools import setup, find_packages
 requirements = [
     "logzero",
     "requests",
+    "jikanpy",
+    "backoff",
     "click",
     "pygsheets",
     "cachecontrol[filecache]",
