@@ -1,3 +1,5 @@
+include *.in
 include LICENSE
-exclude tags*
 include mypy.ini
+include update
+recursive-include mnu_gsheets *.py
