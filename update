@@ -1,0 +1,15 @@
+#!/bin/bash
+
+THIS_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+cd "$THIS_DIR" || exit $?
+
+readonly SECRET=./client_secret.json
+# hardcoded, for my usage
+readonly SHEETS_ID='1N4D3C0bSXVcVh0ggt_mpKMy_OrAdkKGkMjwkMekjpOM'
+
+if [[ ! -r "$SECRET" ]]; then
+	echo "Secret file ${SECRET} doesn't exist!" >&2
+	exit 1
+fi
+
+exec mnu_gsheets update --creds ./client_secret.json --sid "$SHEETS_ID"
