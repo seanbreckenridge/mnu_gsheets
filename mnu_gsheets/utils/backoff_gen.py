@@ -1,5 +1,6 @@
-from backoff import fibo
+from backoff import fibo  # type: ignore[import]
 from typing import Iterator
+
 
 def fibo_long() -> Iterator[int]:
     f = fibo()

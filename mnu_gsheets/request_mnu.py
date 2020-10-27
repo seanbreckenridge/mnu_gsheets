@@ -1,7 +1,6 @@
 import os
-import json
 from datetime import date
-from typing import List, Dict, Any, NamedTuple, Optional, Iterator
+from typing import List, NamedTuple, Optional, Iterator
 
 import requests
 from cachecontrol import CacheControl  # type: ignore[import]
@@ -11,6 +10,7 @@ from cachecontrol.caches.file_cache import FileCache  # type: ignore[import]
 from . import cache_dir
 from .log import logger
 from .utils.user_agent import random_user_agent
+from .common import Json
 
 session = requests.Session()
 session.headers.update({"User-Agent": random_user_agent()})
@@ -38,12 +38,16 @@ class MnuData(NamedTuple):
     kana: str
     body_text: str
     credits: MnuCredits
-    date_start: Optional[date]
-    date_end: Optional[date]
+    broadcast_start: Optional[date]
+    broadcast_end: Optional[date]
 
     @property
     def link(self) -> str:
         return "https://www.nhk.or.jp/minna/songs/{}".format(self.mnu_id)
+
+    @property
+    def image_link(self) -> str:
+        return "https://www.nhk.or.jp" + self.image
 
 
 def _parse_date(ds: str) -> Optional[date]:
@@ -55,7 +59,7 @@ def _parse_date(ds: str) -> Optional[date]:
         return None
 
 
-def parse_json_entry(d: Dict[str, Any]) -> MnuData:
+def parse_json_entry(d: Json) -> MnuData:
     return MnuData(
         mnu_id=d["keyname"],
         title=d["title"],
@@ -69,14 +73,18 @@ def parse_json_entry(d: Dict[str, Any]) -> MnuData:
             arrangement=d["credit"]["arrangement"],
             picture=d["credit"]["picture"],
         ),
-        date_start=_parse_date(d["date_start"]),
-        date_end=_parse_date(d["date_end"]),
+        broadcast_start=_parse_date(d["date_start"]),
+        broadcast_end=_parse_date(d["date_end"]),
     )
+
+
+def request_mnu_json() -> List[Json]:
+    resp_json: List[Json] = cachesession.get(INDEX).json()["items"]
+    return resp_json
 
 
 def request_mnu_data() -> Iterator[MnuData]:
     """
     Request info from the NHK website
     """
-    resp: requests.Response = cachesession.get(INDEX)
-    yield from map(parse_json_entry, resp.json()["items"])
+    yield from map(parse_json_entry, request_mnu_json())

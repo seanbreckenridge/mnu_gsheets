@@ -1,7 +1,5 @@
 # mnu_gsheets
 
-WIP
-
 tracking obscure anime music videos
 
 ## Installation
@@ -18,6 +16,13 @@ pip install .
 # follow instructions to setup google sheets
 # https://pygsheets.readthedocs.io/en/staging/authorization.html
 # put secret file in ./client_secret.json
-# create a spreadsheet with header structure similar to https://docs.google.com/spreadsheets/d/1N4D3C0bSXVcVh0ggt_mpKMy_OrAdkKGkMjwkMekjpOM
+# create a spreadsheet and name the target worksheet 'Index'
 mnu_gsheets update --sid 1N4D.... --creds ./client_secret.json
 ```
+
+I use the `update` script to do the above
+
+### TODO:
+
+- show images using proxy
+- data validation
