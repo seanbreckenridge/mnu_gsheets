@@ -68,4 +68,5 @@ def update_sheet(
     worksheet.update_values(
         crange=f"{start_range}:{end_range}",
         values=pad_data(data, start_range, end_range),
+        extend=True,
     )

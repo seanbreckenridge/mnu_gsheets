@@ -88,7 +88,12 @@ def get_worksheet(secret_file: str, spreadsheet_id: str) -> pygsheets.Worksheet:
     return worksheet
 
 
-def update(secret_file: str, spreadsheet_id: str, mnu_data: List[MnuData]) -> None:
+def update(
+    secret_file: str,
+    spreadsheet_id: str,
+    mnu_data: List[MnuData],
+    skip_romaji: bool = False,
+) -> None:
     # setup
     worksheet = get_worksheet(secret_file, spreadsheet_id)
     worksheet.frozen_rows = frozen_rows
@@ -110,32 +115,40 @@ def update(secret_file: str, spreadsheet_id: str, mnu_data: List[MnuData]) -> No
         [get_named_column(row, "MnU ID") for row in all_vals[frozen_rows:]]
     )
 
+    # create a list of any new IDs
+    new_vals: WorksheetData = []
     for mdat in mnu_data:
         # if not already on the spreadsheet
         if mdat.mnu_id not in ids_in_worksheet:
             # create corresponding row
             logger.info("Adding {} to spreadsheet".format(mdat.mnu_id))
-            all_vals.append(create_mnu_row(mdat))
+            new_vals.append(create_mnu_row(mdat))
 
-    last_column: str = column_to_letter(len(header_info))
-    bottom_row: int = len(all_vals)
+    # if there are any new rows to add
+    if new_vals:
+        top_row = len(all_vals) + 1
+        last_column: str = column_to_letter(len(header_info))
+        bottom_row: int = len(all_vals) + len(new_vals)
 
-    update_sheet(worksheet, all_vals, "A1", f"{last_column}{bottom_row}")
+        update_sheet(worksheet, new_vals, f"A{top_row}", f"{last_column}{bottom_row}")
 
     # if any MAL links have been addded which dont have corresponding Romaji
-    all_cells: WorksheetData = worksheet.get_all_values(returnas="range").cells
-    for row in all_cells:
-        romaji_cell: pygsheets.Cell = get_named_column(row, "Romaji")
-        mal_cell: pygsheets.Cell = get_named_column(row, "MyAnimeList")
-        # if MAL has value, but romaji is empty
-        if mal_cell.value.strip() and not romaji_cell.value.strip():
-            logger.info("Requesting romaji for {}...".format(mal_cell.value.strip()))
-            try:
-                romaji_text: str = get_romaji(
-                    re.findall("anime/(\d+)", mal_cell.value)[0]
+    if not skip_romaji:
+        all_cells: WorksheetData = worksheet.get_all_values(returnas="range").cells
+        for row in all_cells:
+            romaji_cell: pygsheets.Cell = get_named_column(row, "Romaji")
+            mal_cell: pygsheets.Cell = get_named_column(row, "MyAnimeList")
+            # if MAL has value, but romaji is empty
+            if mal_cell.value.strip() and not romaji_cell.value.strip():
+                logger.info(
+                    "Requesting romaji for {}...".format(mal_cell.value.strip())
                 )
-            except Exception as e:
-                logger.exception(e)
-                continue
-            # linked cell updates remote value
-            romaji_cell.value = romaji_text
+                try:
+                    romaji_text: str = get_romaji(
+                        re.findall("anime/(\d+)", mal_cell.value)[0]
+                    )
+                except Exception as e:
+                    logger.exception(e)
+                    continue
+                # linked cell updates remote value
+                romaji_cell.value = romaji_text
