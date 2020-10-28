@@ -1,10 +1,13 @@
 # grab links from the MAL club to attach to mnu ids
 # need to use selenium here since external links arent scrapable
 
+import os
 import json
 from jikanpy import Jikan
 from time import sleep
 from selenium import webdriver
+
+this_dir = os.path.dirname(os.path.abspath(__file__))
 
 j = Jikan("http://localhost:8000/v3/")
 relations = j.club(72940)["anime_relations"]
@@ -32,20 +35,32 @@ driver.find_element_by_css_selector(
 # wait for login?? shouldnt POST do this?
 sleep(10)
 
-url_info = {}
+try:
+    with open("results.json", 'r') as f:
+        url_info = json.load(f)
+except:
+    url_info = {}
 
 for page_info in relations:
     url: str = "https://myanimelist.net/anime/{}".format(page_info["mal_id"])
+    if url in url_info:
+        continue
     driver.get(url)
-    el = driver.find_element_by_css_selector(
+    sleep(1)
+    el = driver.find_elements_by_css_selector(
         "#content > table > tbody > tr > td.borderClass > div > div.pb16 > a"
     )
-    if el is None:
+    if not el:
         print(f"Couldnt find ID for {url}")
     else:
-        url_info = {url: el.get_attribute("href")}
-        print(el.get_attribute("href"))
-    sleep(5)
+        url_info[url] = el[0].get_attribute("href")
+    sleep(3)
+    with open("results.json", "w") as f:
+        f.write(json.dumps(url_info))
 
-with open("results.json", "w") as f:
-    f.write(json.dumps(url_info))
+# report if any failed
+for page_info in relations:
+    url: str = "https://myanimelist.net/anime/{}".format(page_info["mal_id"])
+    if url not in url_info:
+        print(f"Warning: did not download link for {url}")
+    
