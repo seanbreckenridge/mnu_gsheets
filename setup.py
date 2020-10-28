@@ -8,6 +8,7 @@ requirements = [
     "backoff",
     "click",
     "pygsheets",
+    "google-auth",
     "cachecontrol[filecache]",
     "appdirs",
 ]
