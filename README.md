@@ -26,4 +26,3 @@ I use the `update` script to do the above
 
 - show images using proxy
 - data validation
-- sort list
