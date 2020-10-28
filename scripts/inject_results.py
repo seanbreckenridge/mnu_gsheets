@@ -34,5 +34,6 @@ for row in raw_vals:
     mal_cell = row[3]
     mnu_id = row[0].value
     if mnu_id in id_map:
-        # linked cells update remote value
-        mal_cell.value = id_map[mnu_id]
+        if not mal_cell.value.strip():
+            # linked cells update remote value
+            mal_cell.value = id_map[mnu_id]
