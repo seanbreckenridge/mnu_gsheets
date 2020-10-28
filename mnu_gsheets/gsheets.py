@@ -159,4 +159,4 @@ def update(
                 # linked cell updates remote value
                 romaji_cell.value = romaji_text
 
-    worksheet.update_value("A1", "Updated on " + str(datetime.now()).split(".")[0])
+    worksheet.update_value("A1", "Last Updated: " + str(datetime.now()).split(".")[0])
