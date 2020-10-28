@@ -132,7 +132,11 @@ def update(
 
         update_sheet(worksheet, new_vals, f"A{top_row}", f"{last_column}{bottom_row}")
 
-    worksheet.sort_range(start=f"A{frozen_rows + 1}", end=f"{column_to_letter(len(header_info))}{worksheet.rows}", sortorder="DESCENDING")
+    worksheet.sort_range(
+        start=f"A{frozen_rows + 1}",
+        end=f"{column_to_letter(len(header_info))}{worksheet.rows}",
+        sortorder="DESCENDING",
+    )
 
     # if any MAL links have been addded which dont have corresponding Romaji
     if not skip_romaji:
@@ -155,4 +159,4 @@ def update(
                 # linked cell updates remote value
                 romaji_cell.value = romaji_text
 
-    worksheet.update_value('A1', 'Updated on ' + str(datetime.now()).split(".")[0])
+    worksheet.update_value("A1", "Updated on " + str(datetime.now()).split(".")[0])
