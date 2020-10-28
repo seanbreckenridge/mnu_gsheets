@@ -135,7 +135,7 @@ def update(
     # if any MAL links have been addded which dont have corresponding Romaji
     if not skip_romaji:
         all_cells: WorksheetData = worksheet.get_all_values(returnas="range").cells
-        for row in all_cells:
+        for row in all_cells[frozen_rows:]:
             romaji_cell: pygsheets.Cell = get_named_column(row, "Romaji")
             mal_cell: pygsheets.Cell = get_named_column(row, "MyAnimeList")
             # if MAL has value, but romaji is empty
