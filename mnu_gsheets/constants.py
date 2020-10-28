@@ -5,6 +5,7 @@ header_info = [
     "Romaji",
     "MyAnimeList",
     "Source Archived",
+    "Quality",
     "Title",
     "Image",
     "Kana",

@@ -57,7 +57,8 @@ def create_mnu_row(mdat: MnuData) -> WorksheetRow:
                 f'=HYPERLINK("{mdat.link}", "{mdat.link}")',
                 "",  # no romaji by default
                 "",  # mal
-                "N",
+                "",  # no source
+                "",  # no quality
                 mdat.title,
                 f'=HYPERLINK("{mdat.image_link}", "{mdat.image_link}")',
                 mdat.kana,
