@@ -22,7 +22,7 @@ id_map: Dict[str, str] = {}
 
 # clean ids, map mnu id to mal id
 for m_url, mnu_url in results.items():
-    #print(mnu_url)
+    # print(mnu_url)
     mnu_ids = re.findall(r"(MIN[\d_]+)", mnu_url)
     if not mnu_ids:
         print(f"Couldnt extract info from {m_url} {mnu_url}")

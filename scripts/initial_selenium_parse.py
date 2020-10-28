@@ -36,7 +36,7 @@ driver.find_element_by_css_selector(
 sleep(10)
 
 try:
-    with open("results.json", 'r') as f:
+    with open("results.json", "r") as f:
         url_info = json.load(f)
 except:
     url_info = {}
@@ -63,4 +63,3 @@ for page_info in relations:
     url: str = "https://myanimelist.net/anime/{}".format(page_info["mal_id"])
     if url not in url_info:
         print(f"Warning: did not download link for {url}")
-    
