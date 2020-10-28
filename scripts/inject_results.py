@@ -3,7 +3,7 @@ import json
 import re
 from typing import Dict
 
-from mnu_gsheets.gsheets import get_worksheet, get_named_column
+from mnu_gsheets.gsheets import get_worksheet
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 

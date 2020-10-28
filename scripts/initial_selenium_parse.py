@@ -3,11 +3,8 @@
 
 import json
 from jikanpy import Jikan
-from selenium import webdriver
 from time import sleep
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 j = Jikan("http://localhost:8000/v3/")
 relations = j.club(72940)["anime_relations"]
