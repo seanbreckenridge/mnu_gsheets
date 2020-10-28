@@ -1,3 +1,4 @@
+import re
 from datetime import date
 from typing import List, Set, Optional
 
@@ -6,15 +7,16 @@ import pygsheets  # type: ignore[import]
 from .request_mnu import MnuData
 from .utils.gsheet_utils import update_sheet, column_to_letter
 from .constants import worksheet_title, header_info, frozen_rows
-from .common import WorksheetData, WorksheetRow
+from .common import WorksheetData, WorksheetRow, WorksheetValue
+from .mal import get_romaji
 from .log import logger
 
 LIVE_ACTION = "実写"
 
 
-def get_named_column(row: WorksheetRow, column_name: str) -> str:
+def get_named_column(row: WorksheetRow, column_name: str) -> WorksheetValue:
     assert column_name in header_info, "unknown column_name: {}".format(column_name)
-    return row[header_info.index(column_name)].strip()
+    return row[header_info.index(column_name)]
 
 
 def _format_date(d: Optional[date]) -> str:
@@ -53,7 +55,7 @@ def create_mnu_row(mdat: MnuData) -> WorksheetRow:
             [
                 mdat.mnu_id,
                 f'=HYPERLINK("{mdat.link}", "{mdat.link}")',
-                "-",  # no romaji by default
+                "",  # no romaji by default
                 "",  # mal
                 "N",
                 mdat.title,
@@ -76,17 +78,19 @@ def create_mnu_row(mdat: MnuData) -> WorksheetRow:
     )
 
 
-def update_sheets(
-    secret_file: str, spreadsheet_id: str, mnu_data: List[MnuData]
-) -> None:
+def get_worksheet(secret_file: str, spreadsheet_id: str) -> pygsheets.Worksheet:
     # authentication flow happens if needed
     gc = pygsheets.authorize(client_secret=secret_file)
 
     # get references to worksheet
     spreadsheet: pygsheets.Spreadsheet = gc.open_by_key(spreadsheet_id)
     worksheet: pygsheets.Worksheet = spreadsheet.worksheet_by_title(worksheet_title)
+    return worksheet
 
+
+def update(secret_file: str, spreadsheet_id: str, mnu_data: List[MnuData]) -> None:
     # setup
+    worksheet = get_worksheet(secret_file, spreadsheet_id)
     worksheet.frozen_rows = frozen_rows
     update_sheet(
         worksheet, [header_info], "A2", f"{column_to_letter(len(header_info))}2"
@@ -117,3 +121,21 @@ def update_sheets(
     bottom_row: int = len(all_vals)
 
     update_sheet(worksheet, all_vals, "A1", f"{last_column}{bottom_row}")
+
+    # if any MAL links have been addded which dont have corresponding Romaji
+    all_cells: WorksheetData = worksheet.get_all_values(returnas="range").cells
+    for row in all_cells:
+        romaji_cell: pygsheets.Cell = get_named_column(row, "Romaji")
+        mal_cell: pygsheets.Cell = get_named_column(row, "MyAnimeList")
+        # if MAL has value, but romaji is empty
+        if mal_cell.value.strip() and not romaji_cell.value.strip():
+            logger.info("Requesting romaji for {}...".format(mal_cell.value.strip()))
+            try:
+                romaji_text: str = get_romaji(
+                    re.findall("anime/(\d+)", mal_cell.value)[0]
+                )
+            except Exception as e:
+                logger.exception(e)
+                continue
+            # linked cell updates remote value
+            romaji_cell.value = romaji_text

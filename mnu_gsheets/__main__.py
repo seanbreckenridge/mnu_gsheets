@@ -4,7 +4,7 @@ from typing import List
 import click
 
 from .request_mnu import request_mnu_json, request_mnu_data, MnuData
-from .gsheets import update_sheets
+from .gsheets import update as gsheets_update
 
 
 @click.group()
@@ -33,4 +33,4 @@ def update(creds: str, sid: str) -> None:
     done so in the last day. Push any new IDs to the spreadsheet
     """
     mnu: List[MnuData] = list(request_mnu_data())
-    update_sheets(creds, sid, mnu)
+    gsheets_update(creds, sid, mnu)

@@ -1,5 +1,7 @@
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union
+from pygsheets import Cell # type: ignore[import]
 
 Json = Dict[str, Any]
-WorksheetRow = List[str]
+WorksheetValue = Union[str, Cell]
+WorksheetRow = List[WorksheetValue]
 WorksheetData = List[WorksheetRow]
