@@ -1,3 +1,6 @@
+# note: run this from the root directory, not this directory
+# so that it picks up the credential file
+
 import os
 import json
 import re
