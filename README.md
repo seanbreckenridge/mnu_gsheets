@@ -1,6 +1,6 @@
 # mnu_gsheets
 
-tracking obscure anime music videos
+This indexes existing [_minna no uta_](https://en.wikipedia.org/wiki/Minna_no_Uta) entries every couple days, adding rows for ones that don't exist to the spreadsheet, so that they can be added to online databases.
 
 ## Installation
 
