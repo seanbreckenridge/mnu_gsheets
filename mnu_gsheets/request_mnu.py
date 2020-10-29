@@ -79,7 +79,9 @@ def parse_json_entry(d: Json) -> MnuData:
 
 
 def request_mnu_json() -> List[Json]:
+    logger.debug("Starting request...")
     resp_json: List[Json] = cachesession.get(INDEX).json()["items"]
+    logger.debug("Finished request!")
     return resp_json
 
 
