@@ -130,6 +130,7 @@ def update(
         top_row = len(all_vals) + 1
         last_column: str = column_to_letter(len(header_info))
         bottom_row: int = len(all_vals) + len(new_vals)
+        worksheet.rows += len(new_vals)
 
         update_sheet(worksheet, new_vals, f"A{top_row}", f"{last_column}{bottom_row}")
 
