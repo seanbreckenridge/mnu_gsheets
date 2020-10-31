@@ -1,5 +1,5 @@
 from typing import Union
-from ..common import WorksheetRow, WorksheetData
+from ..types import WorksheetRow, WorksheetData
 
 import pygsheets  # type: ignore[import]
 

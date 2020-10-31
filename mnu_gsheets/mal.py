@@ -6,7 +6,7 @@ import backoff  # type: ignore[import]
 import jikanpy
 
 from .utils.backoff_gen import fibo_long
-from .common import Json
+from .types import Json
 
 jikan = jikanpy.Jikan("http://localhost:8000/v3/")
 

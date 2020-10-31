@@ -4,12 +4,12 @@ from typing import List, Set, Optional
 
 import pygsheets  # type: ignore[import]
 
+from .types import WorksheetData, WorksheetRow, WorksheetValue
 from .request_mnu import MnuData
-from .utils.gsheet_utils import update_sheet, column_to_letter
 from .constants import worksheet_title, header_info, frozen_rows
-from .common import WorksheetData, WorksheetRow, WorksheetValue
 from .mal import get_romaji
 from .log import logger
+from .utils.gsheet_utils import update_sheet, column_to_letter
 
 LIVE_ACTION = "実写"
 

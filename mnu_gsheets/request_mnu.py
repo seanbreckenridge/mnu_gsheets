@@ -10,7 +10,7 @@ from cachecontrol.caches.file_cache import FileCache  # type: ignore[import]
 from . import cache_dir
 from .log import logger
 from .utils.user_agent import random_user_agent
-from .common import Json
+from .types import Json
 
 session = requests.Session()
 session.headers.update({"User-Agent": random_user_agent()})
