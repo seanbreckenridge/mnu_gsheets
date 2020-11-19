@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run Mypy
 
 on:
   push:
@@ -21,8 +21,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install packages
         run: |
-          python -m pip install --upgrade pip mypy
-          pip install ./mnu_gsheets
+          python -m pip install mypy
       - name: Run mypy
         run: |
           mypy ./mnu_gsheets
