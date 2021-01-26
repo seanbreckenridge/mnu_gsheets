@@ -39,4 +39,4 @@ def update(creds: str, sid: str, skip_romaji: bool) -> None:
     gsheets_update(creds, sid, mnu, skip_romaji)
 
 if __name__ == "__main__":
-    main()
+    main(prog_name="mnu_gsheets")
