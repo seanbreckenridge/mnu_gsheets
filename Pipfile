@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+logzero = "*"
+requests = "*"
+jikanpy = "*"
+backoff = "*"
+click = "*"
+pygsheets = "*"
+google-auth = "*"
+appdirs = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
+
+[packages.cachecontrol]
+extras = [ "filecache",]
