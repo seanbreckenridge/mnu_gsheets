@@ -153,7 +153,7 @@ def update(
                 )
                 try:
                     romaji_text: str = get_romaji(
-                        re.findall("anime/(\d+)", mal_cell.value)[0]
+                        re.findall(r"anime/(\d+)", mal_cell.value)[0]
                     )
                 except Exception as e:
                     logger.exception(e)
