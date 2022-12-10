@@ -5,7 +5,6 @@ requirements = [
     "logzero",
     "requests",
     "jikanpy",
-    "backoff",
     "click",
     "pygsheets",
     "google-auth",

@@ -25,10 +25,7 @@ def dump_mnu() -> None:
     "--creds", type=click.Path(exists=True), help="client_secret.json credential file"
 )
 @click.option("--sid", type=str, help="google spreadsheet id")
-@click.option(
-    "--skip-romaji", is_flag=True, default=False, help="Skip downloading romaji"
-)
-def update(creds: str, sid: str, skip_romaji: bool) -> None:
+def update(creds: str, sid: str) -> None:
     """
     Update the spreadsheet with any new entries.
 
@@ -36,7 +33,8 @@ def update(creds: str, sid: str, skip_romaji: bool) -> None:
     done so in the last day. Push any new IDs to the spreadsheet
     """
     mnu: List[MnuData] = list(request_mnu_data())
-    gsheets_update(creds, sid, mnu, skip_romaji)
+    gsheets_update(creds, sid, mnu)
+
 
 if __name__ == "__main__":
     main(prog_name="mnu_gsheets")

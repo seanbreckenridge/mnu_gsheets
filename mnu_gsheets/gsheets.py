@@ -7,7 +7,6 @@ import pygsheets  # type: ignore[import]
 from .types import WorksheetData, WorksheetRow, WorksheetValue
 from .request_mnu import MnuData
 from .constants import worksheet_title, header_info, frozen_rows
-from .mal import get_romaji
 from .log import logger
 from .utils.gsheet_utils import update_sheet, column_to_letter
 
@@ -93,7 +92,6 @@ def update(
     secret_file: str,
     spreadsheet_id: str,
     mnu_data: List[MnuData],
-    skip_romaji: bool = False,
 ) -> None:
     # setup
     worksheet = get_worksheet(secret_file, spreadsheet_id)
@@ -139,26 +137,5 @@ def update(
         end=f"{column_to_letter(len(header_info))}{worksheet.rows}",
         sortorder="DESCENDING",
     )
-
-    # if any MAL links have been addded which dont have corresponding Romaji
-    if not skip_romaji:
-        all_cells: WorksheetData = worksheet.get_all_values(returnas="range").cells
-        for row in all_cells[frozen_rows:]:
-            romaji_cell: pygsheets.Cell = get_named_column(row, "Romaji")
-            mal_cell: pygsheets.Cell = get_named_column(row, "MyAnimeList")
-            # if MAL has value, but romaji is empty
-            if mal_cell.value.strip() and not romaji_cell.value.strip():
-                logger.info(
-                    "Requesting romaji for {}...".format(mal_cell.value.strip())
-                )
-                try:
-                    romaji_text: str = get_romaji(
-                        re.findall(r"anime/(\d+)", mal_cell.value)[0]
-                    )
-                except Exception as e:
-                    logger.exception(e)
-                    continue
-                # linked cell updates remote value
-                romaji_cell.value = romaji_text
 
     worksheet.update_value("A1", "Last Updated: " + str(datetime.now()).split(".")[0])
