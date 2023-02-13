@@ -3,6 +3,7 @@ from ..types import WorksheetRow, WorksheetData
 
 import pygsheets  # type: ignore[import]
 
+
 # https://stackoverflow.com/a/21231012
 def column_to_letter(col: int) -> str:
     temp: Union[int, str] = 0
