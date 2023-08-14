@@ -24,3 +24,5 @@ python3 -m mnu_gsheets update --sid 1N4D.... --creds ./client_secret.json
 ```
 
 I use the `update` script to do the above
+
+I also upload an export of this whenever I update it, to a public directory on my website: <https://sean.fish/p/mnu_exports/>
