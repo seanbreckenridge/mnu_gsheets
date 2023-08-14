@@ -1,4 +1,4 @@
-import orjson
+import orjson  # type: ignore[import]
 from pathlib import Path
 from typing import Dict, Any, List
 from .gsheets import ExportData, export
