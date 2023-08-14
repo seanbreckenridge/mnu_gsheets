@@ -1,17 +1,6 @@
 import io
 from setuptools import setup, find_packages
 
-requirements = [
-    "logzero",
-    "requests",
-    "jikanpy",
-    "click",
-    "pygsheets",
-    "google-auth",
-    "cachecontrol[filecache]",
-    "appdirs",
-]
-
 # Use the README.md content for the long description:
 with io.open("README.md", encoding="utf-8") as fo:
     long_description = fo.read()
@@ -27,7 +16,7 @@ setup(
     long_description_content_type="text/markdown",
     license="http://www.apache.org/licenses/LICENSE-2.0",
     packages=find_packages(include=["mnu_gsheets"]),
-    install_requires=requirements,
+    install_requires=[],  # in Pipfile
     keywords="anime",
     entry_points={"console_scripts": ["mnu_gsheets = mnu_gsheets.__main__:main"]},
     classifiers=[

@@ -4,7 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-mnu-gsheets = {editable = true, path = "."}
+logzero = "*"
+orjson = "*"
+requests = "*"
+jikanpy = "*"
+click = "*"
+pygsheets = ">=2.0.6"
+google-auth = "*"
+cachecontrol = {version = "*", extras = ["filecache"]}
+appdirs = "*"
+mnu-gsheets = {path = "."}
 
 [dev-packages]
 
