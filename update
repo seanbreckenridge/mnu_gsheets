@@ -12,4 +12,12 @@ if [[ ! -r "$SECRET" ]]; then
 	exit 1
 fi
 
-exec python3 -m mnu_gsheets update --creds ./client_secret.json --sid "$SHEETS_ID"
+case "$1" in
+export)
+	exec python3 -m mnu_gsheets export --creds ./client_secret.json --sid "$SHEETS_ID" .
+	;;
+
+*)
+	exec python3 -m mnu_gsheets update --creds ./client_secret.json --sid "$SHEETS_ID"
+	;;
+esac

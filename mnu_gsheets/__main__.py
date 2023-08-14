@@ -36,5 +36,20 @@ def update(creds: str, sid: str) -> None:
     gsheets_update(creds, sid, mnu)
 
 
+@main.command()
+@click.option(
+    "--creds", type=click.Path(exists=True), help="client_secret.json credential file"
+)
+@click.option("--sid", type=str, help="google spreadsheet id")
+@click.argument("output", type=click.Path(file_okay=False, dir_okay=True, exists=True))
+def export(creds: str, sid: str, output: str) -> None:
+    """
+    Export the spreadsheet to a CSV file
+    """
+    from .export import combine_export
+
+    combine_export(creds, sid, output)
+
+
 if __name__ == "__main__":
     main(prog_name="mnu_gsheets")

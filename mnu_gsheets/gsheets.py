@@ -1,6 +1,5 @@
-import re
 from datetime import date, datetime
-from typing import List, Set, Optional
+from typing import List, Set, Optional, NamedTuple
 
 import pygsheets  # type: ignore[import]
 
@@ -80,7 +79,7 @@ def create_mnu_row(mdat: MnuData) -> WorksheetRow:
 
 def get_worksheet(secret_file: str, spreadsheet_id: str) -> pygsheets.Worksheet:
     # authentication flow happens if needed
-    gc = pygsheets.authorize(client_secret=secret_file)
+    gc = pygsheets.authorize(client_secret=secret_file, local=True)
 
     # get references to worksheet
     spreadsheet: pygsheets.Spreadsheet = gc.open_by_key(spreadsheet_id)
@@ -139,3 +138,45 @@ def update(
     )
 
     worksheet.update_value("A1", "Last Updated: " + str(datetime.now()).split(".")[0])
+
+
+class ExportData(NamedTuple):
+    """
+    Useful information from the google sheet thats not already in the MnuData blobs
+
+    this will be attached to the MnuData blobs
+    """
+
+    mnu_id: str
+    romaji: str
+    mal: str
+    source_archived: str
+    quality: str
+    assumed_live_action: str
+    confirm_live_action: str
+
+
+def export(secret_file: str, spreadsheet_id: str) -> List[ExportData]:
+    """
+    Extract all the useful information from the google sheet
+    """
+
+    worksheet = get_worksheet(secret_file, spreadsheet_id)
+    worksheet.frozen_rows = frozen_rows
+
+    # get all values
+    raw_vals: WorksheetData = worksheet.get_all_values(returnas="matrix")
+
+    # parse the data
+    return [
+        ExportData(
+            mnu_id=get_named_column(row, "MnU ID"),
+            romaji=get_named_column(row, "Romaji"),
+            mal=get_named_column(row, "MyAnimeList"),
+            source_archived=get_named_column(row, "Source Archived"),
+            quality=get_named_column(row, "Quality"),
+            assumed_live_action=get_named_column(row, "Assume Live Action"),
+            confirm_live_action=get_named_column(row, "Confirm Live Action"),
+        )
+        for row in raw_vals[frozen_rows:]
+    ]
