@@ -26,7 +26,7 @@ def pad_data(data: WorksheetData, start_range: str, end_range: str) -> Worksheet
 
     if row_count <= 0 or column_count <= 0:
         raise ValueError(
-            f"Negative range recieved for range: '{start_range} -> {end_range}'"
+            f"Negative range received for range: '{start_range} -> {end_range}'"
         )
 
     initial_row_count: int = len(data)
