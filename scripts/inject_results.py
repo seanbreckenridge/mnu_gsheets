@@ -25,7 +25,7 @@ for m_url, mnu_url in results.items():
     # print(mnu_url)
     mnu_ids = re.findall(r"(MIN[\d_]+)", mnu_url)
     if not mnu_ids:
-        print(f"Couldnt extract info from {m_url} {mnu_url}")
+        print(f"Couldn't extract info from {m_url} {mnu_url}")
         continue
     mnu_id = mnu_ids[0]
     id_map[mnu_id] = m_url

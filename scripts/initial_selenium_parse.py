@@ -1,5 +1,5 @@
 # grab links from the MAL club to attach to mnu ids
-# need to use selenium here since external links arent scrapable
+# need to use selenium here since external links aren't scrapable
 
 import os
 import json
@@ -32,7 +32,7 @@ driver.find_element_by_css_selector(
     ".inputButton.btn-form-submit[value='Login']"
 ).click()
 
-# wait for login?? shouldnt POST do this?
+# wait for login?? shouldn't POST do this?
 sleep(10)
 
 try:
@@ -51,7 +51,7 @@ for page_info in relations:
         "#content > table > tbody > tr > td.borderClass > div > div.pb16 > a"
     )
     if not el:
-        print(f"Couldnt find ID for {url}")
+        print(f"Couldn't find ID for {url}")
     else:
         url_info[url] = el[0].get_attribute("href")
     sleep(3)

@@ -33,7 +33,7 @@ def _format_credits(cs: str) -> str:
     # no data
     if not cs.strip():
         return ""
-    # multiple artists, cant search
+    # multiple artists, can't search
     elif "｜" in cs:
         return cs
     else:
@@ -142,7 +142,7 @@ def update(
 
 class ExportData(NamedTuple):
     """
-    Useful information from the google sheet thats not already in the MnuData blobs
+    Useful information from the google sheet that's not already in the MnuData blobs
 
     this will be attached to the MnuData blobs
     """
