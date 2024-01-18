@@ -25,7 +25,7 @@ def combine_export(secret_file: str, spreadsheet_id: str, output_dir: str) -> No
 
         combined[row.mnu_id] = {
             "spreadsheet_data": row,
-            "mnu_data": mnu_data[row.mnu_id],
+            "mnu_data": mnu_data.get(row.mnu_id),
         }
 
     out_dir = Path(output_dir)
